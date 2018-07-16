@@ -20,34 +20,21 @@ namespace WpfApp14
     /// </summary>
     public partial class MainWindow : Window
     {
-        bool playerstate = true; 
+        bool playerstate = true;
+        Button TicButton = new Button();
+        WrapPanel Gameboard = new WrapPanel();
+        
 
-        public MainWindow()
+
+
+        public void CheckWinner ()
         {
-            InitializeComponent();
-
-            string winner = new string();
-            int buttonCounter = 0;
-            for (int i=0; i<9; i++ )
+            var btn = GameBoard.Children.Cast<Button>();
+            foreach (Button TicButton in btn)
             {
-                Button TicButton = new Button ();
-                TicButton.Background = new SolidColorBrush(Colors.White);
-                TicButton.Tag = buttonCounter++;
-                TicButton.Height = 100;
-                TicButton.Width = 100;
-
-                TicButton.Click += new RoutedEventHandler (ButtonClicked);
-
-                GameBoard.Children.Add(TicButton);
-
-
-            }
-            
-            foreach (Button TicButton in // u čemu da stavim da mi se nalaze? ne može gameboard niti public MainWIndow gdje smo ih i napravili?)
-            {
-                if (TicButton.Tag.Equals("0") && TicButton.Tag.Equals("1") && TicButton.Tag.Equals("2")) 
+                if (TicButton.Tag.Equals("0") && TicButton.Tag.Equals("1") && TicButton.Tag.Equals("2"))
                 { WinnerLbl.Content = "Congratulations, You win!"; }
-                 if (TicButton.Tag.Equals ("3") && TicButton.Tag.Equals("4") && TicButton.Tag.Equals("5"))
+                if (TicButton.Tag.Equals("3") && TicButton.Tag.Equals("4") && TicButton.Tag.Equals("5"))
                 { WinnerLbl.Content = "Congratulations, You win!"; }
                 if (TicButton.Tag.Equals("6") && TicButton.Tag.Equals("7") && TicButton.Tag.Equals("8"))
                 { WinnerLbl.Content = "Congratulations, You win!"; }
@@ -61,11 +48,37 @@ namespace WpfApp14
                 { WinnerLbl.Content = "Congratulations, You win!"; }
                 if (TicButton.Tag.Equals("2") && TicButton.Tag.Equals("4") && TicButton.Tag.Equals("6"))
                 { WinnerLbl.Content = "Congratulations, You win!"; }
-                else { WinnerLbl.Content = "Unfortunately,You lose.";}
+                else { WinnerLbl.Content = ""; }
             }
-            // ne znam u šta da stavim ovaj foreach da bi radio i da ga onda mogu pozivati nakon svakog klika, u voidu "Button clicked"?
         }
-        private void ButtonClicked (Object sender, EventArgs e)
+        public MainWindow()
+        {
+            InitializeComponent();
+
+
+            string winner = String.Format ("");
+            int buttonCounter = 0;
+            for (int i=0; i<9; i++ )
+            {
+                Button TicButton = new Button ();
+                TicButton.Background = new SolidColorBrush(Colors.White);
+                TicButton.Tag = buttonCounter++;
+                TicButton.Height = 100;
+                TicButton.Width = 100;
+
+                TicButton.Click += new RoutedEventHandler (ButtonClicked);
+
+                GameBoard.Children.Add(TicButton);
+
+                
+
+            }
+                  
+            
+            
+        }
+
+        public void ButtonClicked (Object sender, EventArgs e)
         {
             Button TicButton = (Button)sender;
             
@@ -75,10 +88,12 @@ namespace WpfApp14
 
                     
                     }
-
+            
             else { TicButton.Content = "O";
                 playerstate = true;
             }
+
+            CheckWinner();
             var Buttons = GameBoard.Children.Cast<Button>();
         }
         
@@ -87,6 +102,3 @@ namespace WpfApp14
     }
 }
 
-//var butons = Gameboard.CHildren.Cast <Button>(); 
-
-    //pozivam f-ju chekwinner na kraju svakog klika
